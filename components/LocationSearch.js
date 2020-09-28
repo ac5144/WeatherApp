@@ -1,18 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
 
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
-const LocationSearch = () => {
+const LocationSearch = ({setLocation}) => {
+
+	const [locationText, setLocationText] = useState('');
+
+	const onChange = (location) => setLocationText(location);
 
 	return (
 
 		<View style={styles.searchView}>
 			<TextInput
-				placeholder="Search location..."
 				style={styles.searchInput}
+				placeholder="Search location..."
+				onChangeText={onChange}
 			/>
-			<TouchableOpacity style={styles.searchBtn}>
+			<TouchableOpacity
+				style={styles.searchBtn}
+				onPress={() => setLocation(locationText)}
+			>
 				<Text style={styles.searchBtnText}>
 					<Icon name="search" size={20} />
 				</Text>
