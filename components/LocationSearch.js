@@ -32,12 +32,10 @@ const LocationSearch = ({setLocation}) => {
 const styles = StyleSheet.create({
 
 	searchView: {
-
 		flexDirection: 'row',
 		padding: 15
 	},
 	searchInput: {
-
 		flex: 9,
 		borderStyle: 'solid',
 		borderWidth: 1,
@@ -46,14 +44,12 @@ const styles = StyleSheet.create({
 		padding: 10
 	},
 	searchBtn: {
-
 		flex: 1,
 		backgroundColor: 'dodgerblue',
 		padding: 10,
 		alignItems: 'center'
 	},
 	searchBtnText: {
-
 		color: 'white'
 	}
 });
