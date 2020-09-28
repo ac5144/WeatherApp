@@ -11,7 +11,7 @@ import LocationSearch from './components/LocationSearch';
 import DayForecast from './components/DayForecast';
 
 class App extends Component {
-	API_KEY = 'af59233bd2f12af5bb5f2a3d6ae34d15';
+	API_KEY = '';
 	units = 'imperial';
 
 	constructor(props) {
