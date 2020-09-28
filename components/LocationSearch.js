@@ -14,7 +14,7 @@ const LocationSearch = ({setLocation}) => {
 		<View style={styles.searchView}>
 			<TextInput
 				style={styles.searchInput}
-				placeholder="Search location..."
+				placeholder="Search zip code or city name..."
 				onChangeText={onChange}
 			/>
 			<TouchableOpacity

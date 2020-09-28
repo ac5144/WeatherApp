@@ -39,7 +39,12 @@ class App extends Component {
 			return;
 		}
 
-		const url = `https://api.openweathermap.org/data/2.5/forecast?zip=${this.state.location},us&units=${this.units}&appid=${this.API_KEY}`;
+		let url = '';
+		if (isNaN(this.state.location)) {
+			url = `https://api.openweathermap.org/data/2.5/forecast?q=${this.state.location}&units=${this.units}&appid=${this.API_KEY}`;
+		} else {
+			url = `https://api.openweathermap.org/data/2.5/forecast?zip=${this.state.location},us&units=${this.units}&appid=${this.API_KEY}`;
+		}
 
 		fetch(url)
 			.then(res => res.json())
@@ -47,7 +52,7 @@ class App extends Component {
 				let newState = {
 					...this.state
 				};
-				
+
 				if (weatherData.cod !== "200") {
 					weatherData: null,
 					newState.slicedWeatherData = []
