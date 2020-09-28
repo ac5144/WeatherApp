@@ -19,12 +19,19 @@ class App extends Component {
 
 		this.state = {
 			location: '',
-			weatherData: null
+			weatherData: null,
+			slicedWeatherData: [],
+			error: false,
+			errorMsg: ''
 		}
 	}
 
 	setLocation = (newLocation) => {
-		this.setState({location: newLocation}, this.fetchWeatherData);
+		const newState = {
+			...this.state,
+			location: newLocation
+		}
+		this.setState(newState, this.fetchWeatherData);
 	}
 
 	fetchWeatherData = () => {
@@ -36,18 +43,36 @@ class App extends Component {
 
 		fetch(url)
 			.then(res => res.json())
-			.then(weatherData => this.setState({weatherData}))
+			.then(weatherData => {
+				let newState = {
+					...this.state
+				};
+				
+				if (weatherData.cod !== "200") {
+					weatherData: null,
+					newState.slicedWeatherData = []
+					newState.error = true;
+					newState.errorMsg = weatherData.message;
+				} else {
+					newState.weatherData = weatherData;
+					newState.slicedWeatherData = this.sliceHourlyWeatherData(weatherData);
+					newState.error = false;
+					newState.errorMsg = '';
+				}
+
+				this.setState(newState);
+			})
 			.catch(err => console.log(err));
 	}
 
-	sliceHourlyWeatherData = () => {
+	sliceHourlyWeatherData = (weatherData) => {
 		const slicedWeatherData = [];
 		const interval = 8;
 
-		if (this.state.weatherData) {
-			for (let i = 0; i < this.state.weatherData.list.length; i = i + interval) {
+		if (weatherData) {
+			for (let i = 0; i < weatherData.list.length; i = i + interval) {
 
-				slicedWeatherData.push(this.state.weatherData.list.slice(i, i + interval));
+				slicedWeatherData.push(weatherData.list.slice(i, i + interval));
 			}
 		}
 
@@ -55,14 +80,14 @@ class App extends Component {
 	}
 
 	render() {
-		const slicedWeatherData = this.sliceHourlyWeatherData();
 
 		return(
 			<View style={styles.container}>
 				<Header />
 				<LocationSearch setLocation={this.setLocation} />
 				<ScrollView>
-					{slicedWeatherData.map((weatherData, index) => <DayForecast key={index} weatherData={weatherData} />)}
+					{this.state.error && <Text style={styles.errorText}>There was an error: {this.state.errorMsg}</Text>}
+					{this.state.slicedWeatherData.map((weatherData, index) => <DayForecast key={index} weatherData={weatherData} />)}
 				</ScrollView>
 			</View>
 		);
@@ -72,6 +97,11 @@ class App extends Component {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1
+	},
+	errorText: {
+		padding: 15,
+		fontSize: 16,
+		color: 'firebrick'
 	}
 })
 
